@@ -33,6 +33,19 @@ export LDFLAGS="${LDFLAGS:-} -Wl,-rpath,${DEST}/lib -L${DEST}/lib"
 alias make="make -j8 V=1 VERBOSE=1"
 
 ### support functions ###
+# Download a TAR file and unpack it, removing old files.
+# $1: file
+# $2: url
+# $3: folder
+_download_tar() {
+  [[ ! -d "download" ]]      && mkdir -p "download"
+  [[ ! -d "target" ]]        && mkdir -p "target"
+  [[ ! -f "download/${1}" ]] && wget -O "download/${1}" "${2}"
+  [[   -d "target/${3}" ]]   && rm -vfr "target/${3}"
+  [[ ! -d "target/${3}" ]]   && tar -xvf "download/${1}" -C target
+  return 0
+}
+
 # Download a TGZ file and unpack it, removing old files.
 # $1: file
 # $2: url
@@ -43,6 +56,19 @@ _download_tgz() {
   [[ ! -f "download/${1}" ]] && wget -O "download/${1}" "${2}"
   [[   -d "target/${3}" ]]   && rm -vfr "target/${3}"
   [[ ! -d "target/${3}" ]]   && tar -zxvf "download/${1}" -C target
+  return 0
+}
+
+# Download a BZ2 file and unpack it, removing old files.
+# $1: file
+# $2: url
+# $3: folder
+_download_bz2() {
+  [[ ! -d "download" ]]      && mkdir -p "download"
+  [[ ! -d "target" ]]        && mkdir -p "target"
+  [[ ! -f "download/${1}" ]] && wget -O "download/${1}" "${2}"
+  [[   -d "target/${3}" ]]   && rm -vfr "target/${3}"
+  [[ ! -d "target/${3}" ]]   && tar -jxvf "download/${1}" -C target
   return 0
 }
 
