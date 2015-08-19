@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 #
-# Service.sh for p7zip
+# Service.sh for htop
 
 # import DroboApps framework functions
 . /etc/service.subr
 
 framework_version="2.1"
 name="p7zip"
-version="9.38.1"
-description="p7zip 9.38.1"
+version="9.38.1-1"
+description="File archiver with a high compression ratio"
 depends=""
 webui=""
 
@@ -21,26 +21,28 @@ errorfile="${tmp_dir}/error.txt"
 
 # backwards compatibility
 if [ -z "${FRAMEWORK_VERSION:-}" ]; then
+  framework_version="2.0"
   . "${prog_dir}/libexec/service.subr"
 fi
 
 start() {
+  rm -f "${errorfile}"
+  echo "p7zip is configured." > "${statusfile}"
+  touch "${pidfile}"
   return 0
 }
 
 is_running() {
-  return 0
-}
-
-is_stopped() {
-  return 0
+  [ -f "${pidfile}" ]
 }
 
 stop() {
+  rm -f "${pidfile}"
   return 0
 }
 
 force_stop() {
+  rm -f "${pidfile}"
   return 0
 }
 
@@ -52,7 +54,6 @@ STDERR=">&4"
 echo "$(date +"%Y-%m-%d %H-%M-%S"):" "${0}" "${@}"
 set -o errexit  # exit on uncaught error code
 set -o nounset  # exit on unset variable
-set -o pipefail # propagate last error code on pipe
 set -o xtrace   # enable script tracing
 
 main "${@}"
