@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #
-# Service.sh for htop
+# Service.sh for p7zip
 
 # import DroboApps framework functions
 . /etc/service.subr
